@@ -1,30 +1,29 @@
 import 'dotenv/config'
-import config from './config'
 
-async function runPlugins(project, conf) {
+async function runPlugins(project, config) {
   const data = await Promise.all(
-    Object.entries(conf.plugins).map(async ([name, plugin]) => {
+    Object.entries(config.plugins).map(async ([name, plugin]) => {
       return [name, await plugin(project)]
     })
   )
   return Object.fromEntries(data)
 }
 
-async function runChecks(project, conf) {
+async function runChecks(project, config) {
   return Promise.all(
-    conf.rules.map(async ({ check, ...rule }) => ({
+    config.rules.map(async ({ check, ...rule }) => ({
       ...rule,
       pass: Boolean(await check(project)),
     }))
   )
 }
 
-async function run(conf) {
+export async function run(config) {
   const projects = await Promise.all(
-    conf.repositories.map(async (repo) => {
+    config.repositories.map(async (repo) => {
       const [owner, name] = repo.split('/')
       const project = { repo, owner, name }
-      const pluginsData = await runPlugins(project, conf)
+      const pluginsData = await runPlugins(project, config)
       return {
         ...project,
         ...pluginsData,
@@ -36,12 +35,10 @@ async function run(conf) {
       const { repo } = project
       return {
         repo,
-        rules: await runChecks(project, conf),
+        rules: await runChecks(project, config),
       }
     })
   )
 
-  console.log(require('util').inspect(results, false, null, true))
+  return { projects: results }
 }
-
-run(config)

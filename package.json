@@ -1,15 +1,15 @@
 {
   "name": "technical-stats",
   "version": "1.0.0",
-  "main": "index.js",
   "repository": "https://github.com/monito/technical-stats.git",
   "author": "",
   "license": "MIT",
   "scripts": {
-    "start": "node -r esm src/index"
+    "start": "node -r esm cli",
+    "viewer:serve": "parcel serve ./report-viewer/index.html",
+    "viewer:build": "parcel build ./report-viewer/index.html"
   },
   "dependencies": {
-    "@types/node": "^12.19.11",
     "dotenv": "^8.2.0",
     "graphql": "^15.4.0",
     "graphql-request": "^3.4.0",

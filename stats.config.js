@@ -1,8 +1,8 @@
-import javascript from './plugins/plugin-javascript'
-import typescript from './plugins/plugin-typescript'
-import github from './plugins/plugin-github'
+import javascript from './runner/plugins/plugin-javascript'
+import typescript from './runner/plugins/plugin-typescript'
+import github from './runner/plugins/plugin-github'
 
-export default {
+module.exports = {
   repositories: [
     'gifsa/tawidata',
     'gifsa/tawicontent',
@@ -35,8 +35,8 @@ export default {
       name: 'PHP Free',
       description: 'Not using PHP',
       check({ github }) {
-        return github.languages.find(l => l.name === 'PHP') === undefined
-      }
+        return github.languages.find((l) => l.name === 'PHP') === undefined
+      },
     },
     {
       name: 'Latest Logger',

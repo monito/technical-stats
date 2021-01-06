@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Report viewer</title>
+    <link
+      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body class="antialiased font-sans bg-gray-100">
+    <div id="app" v-cloak>
+      <div class="p-6">
+        <div class="shadow rounded overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Name
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                v-for="rule in rules"
+                :key="rule.name"
+              >
+                {{ rule.name }}
+              </th>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr v-for="project in report.projects" :key="project.repo">
+                <td class="px-6 py-3 whitespace-nowrap">
+                  <div class="font-medium">{{ project.repo }}</div>
+                </td>
+                <td
+                  class="px-6 py-3 whitespace-nowrap"
+                  v-for="rule in project.rules"
+                  :key="rule.name"
+                >
+                  <span
+                    v-if="rule.pass"
+                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
+                  >
+                    PASS
+                  </span>
+                  <span
+                    v-else="rule.pass"
+                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800"
+                  >
+                    FAIL
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>
+      window.REPORT_JSON = %REPORT_JSON%
+    </script>
+    <script>
+      Vue.createApp({
+        data() {
+          return {
+            report: window.REPORT_JSON,
+          }
+        },
+        computed: {
+          rules() {
+            const { projects } = this.report
+            return projects[0].rules.map((rule) => ({
+              name: rule.name,
+              description: rule.description,
+            }))
+          },
+        },
+      }).mount('#app')
+    </script>
+  </body>
+</html>
