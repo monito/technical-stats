@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "module": "CommonJS",
+        "moduleResolution": "node",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "strict": true
+    },
+    "include": [
+        "cli/**/*",
+        "runner/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ]
+}
