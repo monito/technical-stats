@@ -73,6 +73,12 @@
                     >
                       SKIP
                     </span>
+                    <span
+                      v-if="rule.status === 'error'"
+                      class="px-2 rounded-full bg-red-600 text-white"
+                    >
+                      ERROR
+                    </span>
                   </span>
                 </td>
               </tr>

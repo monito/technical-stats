@@ -1,13 +1,17 @@
 interface Check {
   status: 'pass' | 'warn' | 'fail' | 'error' | 'skip'
   value?: string | number | undefined
-  message?: string
 }
 
 interface Goal {
   name: string
   description: string
-  check(repo: unknown): Promise<Check>
+  check(repo: Project): Promise<Check>
+}
+
+export interface CheckResult extends Check {
+  name: string
+  description: string
 }
 
 type Plugin = <T extends Object>(project: Project) => T
