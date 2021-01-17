@@ -27,7 +27,7 @@
               </th>
               <th
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                v-for="rule in rules"
+                v-for="rule in report.rules"
                 :key="rule.name"
                 :title="rule.description"
               >
@@ -103,16 +103,7 @@
           return {
             report: window.REPORT_JSON,
           }
-        },
-        computed: {
-          rules() {
-            const { projects } = this.report
-            return projects[0].rules.map((rule) => ({
-              name: rule.name,
-              description: rule.description,
-            }))
-          },
-        },
+        }
       }).mount('#app')
     </script>
   </body>

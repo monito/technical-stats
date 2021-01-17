@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import { Config, Project, ProjectInfo, CheckResult } from './types'
+import { Config, Project, ProjectInfo, Check } from './types'
 import { getRepositories, getRepository } from './providers/provider-github'
 
 async function runPlugins(project: Project, config: Config): Promise<ProjectInfo> {
@@ -11,18 +11,13 @@ async function runPlugins(project: Project, config: Config): Promise<ProjectInfo
   return Object.fromEntries(data)
 }
 
-async function runChecks(project: Project, config: Config): Promise<CheckResult[]> {
+async function runChecks(project: Project, config: Config): Promise<Check[]> {
   return Promise.all(
-    config.rules.map(async ({ check, ...rule }): Promise<CheckResult> => {
+    config.rules.map(async ({ check }): Promise<Check> => {
       try {
-        const checkResult = await check(project)
-        return {
-          ...rule,
-          ...checkResult,
-        }
+        return await check(project)
       } catch(err) {
         return {
-          ...rule,
           status: 'error',
           value: err.message
         }
@@ -47,7 +42,7 @@ export async function run(config: Config) {
     })
   )
 
-  console.log('Running checks..')
+  console.log('Running checks...')
   const results = await Promise.all(
     projects.map(async (project) => {
       const { repo } = project
@@ -61,5 +56,8 @@ export async function run(config: Config) {
     })
   )
 
-  return { projects: results }
+  return {
+    projects: results,
+    rules: config.rules.map(({ name, description }) => ({ name, description }))
+  }
 }
