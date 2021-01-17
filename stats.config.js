@@ -3,13 +3,7 @@ const typescript = require('./runner/plugins/plugin-typescript').default
 const github = require('./runner/plugins/plugin-github').default
 
 module.exports = {
-  repositories: [
-    'gifsa/tawidata',
-    'gifsa/tawicontent',
-    'gifsa/tawiconfig',
-    'gifsa/tawigator',
-    'gifsa/tawid',
-  ],
+  organization: 'gifsa',
   plugins: {
     javascript,
     typescript,
@@ -20,6 +14,10 @@ module.exports = {
       name: 'Typescript Compliant',
       description: 'Written 75% in TypeScript',
       check({ github }) {
+        const python = github.languages.find((l) => l.name === 'Python')
+        if (python) {
+          return { status: 'skip' }
+        }
         const ts = github.languages.find((l) => l.name === 'TypeScript')
         const value = ts && ts.percentage
         return {
@@ -32,6 +30,9 @@ module.exports = {
       name: 'Typescript Strict',
       description: 'Should use a strict Typescript config',
       check({ typescript }) {
+        if (!typescript.tsconfig) {
+          return { status: 'skip' }
+        }
         const value = typescript.tsconfig.compilerOptions.strict
         return {
           status: value === true ? 'pass' : 'fail',
@@ -53,9 +54,12 @@ module.exports = {
       name: 'Latest Logger',
       description: 'Using latest tawilog library with improved tracing',
       check({ javascript }) {
-        const value = javascript.package.dependencies['@gifsa/logger']
+        if (!javascript.packageJson) {
+          return { status: 'skip' }
+        }
+        const value = javascript.packageJson.dependencies['@gifsa/logger']
         return {
-          status: value >= '^3.0.0',
+          status: value >= '^3.0.0' ? 'pass' : 'fail',
           value
         }
       },

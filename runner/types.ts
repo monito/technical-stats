@@ -13,7 +13,8 @@ interface Goal {
 type Plugin = <T extends Object>(project: Project) => T
 
 export interface Config {
-  repositories: string[]
+  organization?: string
+  repositories?: string[]
   plugins: Plugin[]
   rules: Goal[]
 }
@@ -22,4 +23,11 @@ export interface Project {
   repo: string
   owner: string
   name: string
+}
+
+export interface ProjectInfo {
+  repo: string
+  owner: string
+  name: string
+  [key: string]: string
 }

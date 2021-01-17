@@ -1,7 +1,8 @@
 import 'dotenv/config'
-import { Config, Project } from './types'
+import { Config, Project, ProjectInfo } from './types'
+import { getRepositories, getRepository } from './providers/provider-github'
 
-async function runPlugins(project: Project, config: Config): Promise<Object> {
+async function runPlugins(project: Project, config: Config): Promise<ProjectInfo> {
   const data = await Promise.all(
     Object.entries(config.plugins).map(async ([name, plugin]) => {
       return [name, await plugin(project)]
@@ -20,10 +21,12 @@ async function runChecks(project: Project, config: Config) {
 }
 
 export async function run(config: Config) {
+  const repositories = await getRepositories(config)
+
   const projects = await Promise.all(
-    config.repositories.map(async (repo) => {
+    repositories.map(async (repo) => {
       const [owner, name] = repo.split('/')
-      const project: Project = { repo, owner, name }
+      const project = { repo, owner, name }
       const pluginsData = await runPlugins(project, config)
       return {
         ...project,
@@ -34,8 +37,11 @@ export async function run(config: Config) {
   const results = await Promise.all(
     projects.map(async (project) => {
       const { repo } = project
+      const { url, description } = await getRepository(project)
       return {
         repo,
+        url,
+        description,
         rules: await runChecks(project, config),
       }
     })

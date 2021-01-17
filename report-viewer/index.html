@@ -29,21 +29,32 @@
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 v-for="rule in rules"
                 :key="rule.name"
+                :title="rule.description"
               >
                 {{ rule.name }}
               </th>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
               <tr v-for="project in report.projects" :key="project.repo">
-                <td class="px-6 py-3 whitespace-nowrap">
-                  <div class="font-medium">{{ project.repo }}</div>
+                <td class="px-6 py-3 whitespace-nowrap text-blue-500 hover:underline">
+                  <a
+                    class="font-medium"
+                    target="_blank"
+                    :href="project.url"
+                    :title="project.description"
+                  >
+                    {{ project.repo }}
+                  </a>
                 </td>
                 <td
                   class="px-6 py-3 whitespace-nowrap"
                   v-for="rule in project.rules"
                   :key="rule.name"
                 >
-                  <span class="inline-flex text-xs leading-5 font-semibold">
+                  <span
+                    class="inline-flex text-xs leading-5 font-semibold"
+                    :title="rule.value"
+                  >
                     <span
                       v-if="rule.status === 'pass'"
                       class="px-2 rounded-full bg-green-100 text-green-800"
@@ -51,10 +62,16 @@
                       PASS
                     </span>
                     <span
-                      v-else="rule.status === 'fail'"
+                      v-if="rule.status === 'fail'"
                       class="px-2 rounded-full bg-red-100 text-red-800"
                     >
                       FAIL
+                    </span>
+                    <span
+                      v-if="rule.status === 'skip'"
+                      class="px-2 rounded-full bg-gray-100 text-gray-800"
+                    >
+                      SKIP
                     </span>
                   </span>
                 </td>

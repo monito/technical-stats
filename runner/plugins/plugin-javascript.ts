@@ -17,7 +17,10 @@ const QUERY = gql`
 export default async function (project: Project) {
   const { owner, name } = project
   const { repository } = await client.request(QUERY, { owner, name })
+  const packageJson = repository.package
+    ? JSON.parse(repository.package.text)
+    : null
   return {
-    package: repository.package ? JSON.parse(repository.package.text) : null,
+    packageJson,
   }
 }

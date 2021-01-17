@@ -18,9 +18,8 @@ const QUERY = gql`
 export default async function (project: Project) {
   const { owner, name } = project
   const { repository } = await client.request(QUERY, { owner, name })
-  return {
-    tsconfig: repository.tsconfig
-      ? JSON5.parse(repository.tsconfig.text)
-      : null,
-  }
+  const tsconfig = repository.tsconfig
+    ? JSON5.parse(repository.tsconfig.text)
+    : null
+  return { tsconfig }
 }
