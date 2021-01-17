@@ -1,8 +1,8 @@
 import { run } from '../runner'
-import fs from 'fs'
-import path from 'path'
+import * as fs from 'fs'
+import * as path from 'path'
 
-;(async () => {
+const cli = async () => {
   const configPath = path.resolve('stats.config.js')
   const config = require(configPath)
   const report = await run(config)
@@ -13,7 +13,8 @@ import path from 'path'
     .readFileSync(templatePath, 'utf-8')
     .replace('%REPORT_JSON%', JSON.stringify(report))
 
-
   fs.writeFileSync(outputPath, htmlReport)
   console.log('generated report file at', outputPath)
-})()
+}
+
+cli()

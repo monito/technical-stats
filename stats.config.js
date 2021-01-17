@@ -1,6 +1,6 @@
-import javascript from './runner/plugins/plugin-javascript'
-import typescript from './runner/plugins/plugin-typescript'
-import github from './runner/plugins/plugin-github'
+const javascript = require('./runner/plugins/plugin-javascript').default
+const typescript = require('./runner/plugins/plugin-typescript').default
+const github = require('./runner/plugins/plugin-github').default
 
 module.exports = {
   repositories: [

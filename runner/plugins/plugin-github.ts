@@ -1,5 +1,6 @@
 import { gql } from 'graphql-request'
 import { client } from '../core/api'
+import { Project } from '../types'
 
 const QUERY = gql`
   query Github($owner: String!, $name: String!) {
@@ -19,7 +20,7 @@ const QUERY = gql`
   }
 `
 
-export default async function (project) {
+export default async function (project: Project) {
   const { owner, name } = project
   const { repository } = await client.request(QUERY, { owner, name })
   const { url, description, languages } = repository
@@ -27,7 +28,7 @@ export default async function (project) {
   return {
     url,
     description,
-    languages: languages.edges.map(({ size, node }) => ({
+    languages: languages.edges.map(({ size, node }: { size: number, node: { name: string } }) => ({
       name: node.name,
       percentage: (size / totalSize) * 100,
     })),

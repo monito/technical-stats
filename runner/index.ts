@@ -1,15 +1,17 @@
 import 'dotenv/config'
+import { Config, Project } from './types'
 
-async function runPlugins(project, config) {
+async function runPlugins(project: Project, config: Config): Promise<Object> {
   const data = await Promise.all(
     Object.entries(config.plugins).map(async ([name, plugin]) => {
+      console.log(plugin)
       return [name, await plugin(project)]
     })
   )
   return Object.fromEntries(data)
 }
 
-async function runChecks(project, config) {
+async function runChecks(project: Project, config: Config) {
   return Promise.all(
     config.rules.map(async ({ check, ...rule }) => ({
       ...rule,
@@ -18,11 +20,11 @@ async function runChecks(project, config) {
   )
 }
 
-export async function run(config) {
+export async function run(config: Config) {
   const projects = await Promise.all(
     config.repositories.map(async (repo) => {
       const [owner, name] = repo.split('/')
-      const project = { repo, owner, name }
+      const project: Project = { repo, owner, name }
       const pluginsData = await runPlugins(project, config)
       return {
         ...project,

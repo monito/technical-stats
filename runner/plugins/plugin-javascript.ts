@@ -1,5 +1,6 @@
 import { gql } from 'graphql-request'
 import { client } from '../core/api'
+import { Project } from '../types'
 
 const QUERY = gql`
   query Javascript($owner: String!, $name: String!) {
@@ -13,7 +14,7 @@ const QUERY = gql`
   }
 `
 
-export default async function (project) {
+export default async function (project: Project) {
   const { owner, name } = project
   const { repository } = await client.request(QUERY, { owner, name })
   return {
