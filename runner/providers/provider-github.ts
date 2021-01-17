@@ -5,7 +5,7 @@ import { Project, Config } from '../types'
 const QUERY_GITHUB_REPOSITORIES = gql`
   query GithubRepositories($organization: String!) {
     organization(login: $organization) {
-      repositories(last: 50) {
+      repositories(last: 100) {
         nodes {
           name
         }
