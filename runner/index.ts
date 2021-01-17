@@ -4,7 +4,6 @@ import { Config, Project } from './types'
 async function runPlugins(project: Project, config: Config): Promise<Object> {
   const data = await Promise.all(
     Object.entries(config.plugins).map(async ([name, plugin]) => {
-      console.log(plugin)
       return [name, await plugin(project)]
     })
   )
@@ -15,7 +14,7 @@ async function runChecks(project: Project, config: Config) {
   return Promise.all(
     config.rules.map(async ({ check, ...rule }) => ({
       ...rule,
-      pass: Boolean(await check(project)),
+      ...await check(project),
     }))
   )
 }

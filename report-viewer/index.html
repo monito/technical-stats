@@ -43,17 +43,19 @@
                   v-for="rule in project.rules"
                   :key="rule.name"
                 >
-                  <span
-                    v-if="rule.pass"
-                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-                  >
-                    PASS
-                  </span>
-                  <span
-                    v-else="rule.pass"
-                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800"
-                  >
-                    FAIL
+                  <span class="inline-flex text-xs leading-5 font-semibold">
+                    <span
+                      v-if="rule.status === 'pass'"
+                      class="px-2 rounded-full bg-green-100 text-green-800"
+                    >
+                      PASS
+                    </span>
+                    <span
+                      v-else="rule.status === 'fail'"
+                      class="px-2 rounded-full bg-red-100 text-red-800"
+                    >
+                      FAIL
+                    </span>
                   </span>
                 </td>
               </tr>

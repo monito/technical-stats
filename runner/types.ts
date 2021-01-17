@@ -1,5 +1,5 @@
 interface Check {
-  status: 'good' | 'alright' | 'bad' | 'error' | 'n/a'
+  status: 'pass' | 'warn' | 'fail' | 'error' | 'skip'
   value?: string | number | undefined
   message?: string
 }

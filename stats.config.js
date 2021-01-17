@@ -21,31 +21,43 @@ module.exports = {
       description: 'Written 75% in TypeScript',
       check({ github }) {
         const ts = github.languages.find((l) => l.name === 'TypeScript')
-        return ts && ts.percentage >= 75
+        const value = ts && ts.percentage
+        return {
+          status: value >= 75 ? 'pass' : 'fail',
+          value
+        }
       },
     },
     {
       name: 'Typescript Strict',
       description: 'Should use a strict Typescript config',
       check({ typescript }) {
-        return typescript.tsconfig.compilerOptions.strict === true
+        const value = typescript.tsconfig.compilerOptions.strict
+        return {
+          status: value === true ? 'pass' : 'fail',
+          value
+        }
       },
     },
     {
       name: 'PHP Free',
       description: 'Not using PHP',
       check({ github }) {
-        return github.languages.find((l) => l.name === 'PHP') === undefined
+        return {
+          status: github.languages.find((l) => l.name === 'PHP') === undefined ? 'pass' : 'fail',
+          value: JSON.stringify(github.languages)
+        }
       },
     },
     {
       name: 'Latest Logger',
       description: 'Using latest tawilog library with improved tracing',
       check({ javascript }) {
-        return (
-          javascript.package.dependencies.tawilog >=
-          'git+https://github.com/gifsa/tawilog.git#semver:^1.4.0'
-        )
+        const value = javascript.package.dependencies['@gifsa/logger']
+        return {
+          status: value >= '^3.0.0',
+          value
+        }
       },
     },
   ],
