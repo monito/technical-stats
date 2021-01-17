@@ -20,10 +20,12 @@ module.exports = {
         }
         const ts = github.languages.find((l) => l.name === 'TypeScript')
         const value = ts && ts.percentage
-        return {
-          status: value >= 75 ? 'pass' : 'fail',
-          value
-        }
+        const status = value >= 75
+          ? 'pass'
+          : value >= 50
+            ? 'warn'
+            : 'fail'
+        return { status, value }
       },
     },
     {
@@ -44,9 +46,10 @@ module.exports = {
       name: 'PHP Free',
       description: 'Not using PHP',
       check({ github }) {
+        const php = github.languages.find((l) => l.name === 'PHP')
         return {
-          status: github.languages.find((l) => l.name === 'PHP') === undefined ? 'pass' : 'fail',
-          value: JSON.stringify(github.languages)
+          status: php === undefined ? 'pass' : 'fail',
+          value: JSON.stringify(github.languages.slice(0, 2))
         }
       },
     },
@@ -54,7 +57,7 @@ module.exports = {
       name: 'Latest Logger',
       description: 'Using latest tawilog library with improved tracing',
       check({ javascript }) {
-        if (!javascript.packageJson) {
+        if (!javascript.packageJson || !javascript.packageJson.dependencies) {
           return { status: 'skip' }
         }
         const value = javascript.packageJson.dependencies['@gifsa/logger']

@@ -34,6 +34,7 @@ async function runChecks(project: Project, config: Config): Promise<CheckResult[
 export async function run(config: Config) {
   const repositories = await getRepositories(config)
 
+  console.log('Running plugins...')
   const projects = await Promise.all(
     repositories.map(async (repo) => {
       const [owner, name] = repo.split('/')
@@ -45,6 +46,8 @@ export async function run(config: Config) {
       }
     })
   )
+
+  console.log('Running checks..')
   const results = await Promise.all(
     projects.map(async (project) => {
       const { repo } = project
