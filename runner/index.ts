@@ -46,8 +46,14 @@ export async function run(config: Config) {
   const results = await Promise.all(
     projects.map(async (project) => {
       const { repo } = project
-      const { url, description } = await getRepository(project)
+      const { url, description, isArchived } = await getRepository(project)
+      if (isArchived) {
+        return {
+          active: false
+        }
+      }
       return {
+        active: true,
         repo,
         url,
         description,
@@ -57,7 +63,7 @@ export async function run(config: Config) {
   )
 
   return {
-    projects: results,
+    projects: results.filter(project => project.active),
     rules: config.rules.map(({ name, description }) => ({ name, description }))
   }
 }

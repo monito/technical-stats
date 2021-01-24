@@ -1,12 +1,12 @@
-const javascript = require('./runner/plugins/plugin-javascript').default
 const typescript = require('./runner/plugins/plugin-typescript').default
 const docker = require('./runner/plugins/plugin-docker').default
 const github = require('./runner/plugins/plugin-github').default
 
+const round = (num) => Math.round(num * 100) / 100
+
 module.exports = {
   organization: 'gifsa',
   plugins: {
-    javascript,
     typescript,
     docker,
     github,
@@ -21,7 +21,7 @@ module.exports = {
           return { status: 'skip' }
         }
         const ts = github.languages.find((l) => l.name === 'TypeScript')
-        const value = ts && ts.percentage
+        const value = round(ts && ts.percentage)
         const status = value >= 75
           ? 'pass'
           : value >= 50
@@ -49,20 +49,21 @@ module.exports = {
       description: 'Not using PHP',
       check({ github }) {
         const php = github.languages.find((l) => l.name === 'PHP')
+        const topLang = github.languages[0] || {}
         return {
           status: php === undefined ? 'pass' : 'fail',
-          value: JSON.stringify(github.languages.slice(0, 2))
+          value: `${topLang.name}: ${roundtopLang.percentage}`
         }
       },
     },
     {
       name: 'Latest Logger',
       description: 'Using latest tawilog library with improved tracing',
-      check({ javascript }) {
-        if (!javascript.packageJson || !javascript.packageJson.dependencies) {
+      check({ typescript }) {
+        if (!typescript.packageJson || !typescript.packageJson.dependencies) {
           return { status: 'skip' }
         }
-        const value = javascript.packageJson.dependencies['@gifsa/logger']
+        const value = typescript.packageJson.dependencies['@gifsa/logger']
         return {
           status: value >= '^3.0.0' ? 'pass' : 'fail',
           value

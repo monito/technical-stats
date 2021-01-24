@@ -6,6 +6,11 @@ import * as JSON5 from 'json5'
 const QUERY = gql`
   query Typescript($owner: String!, $name: String!) {
     repository(owner: $owner, name: $name) {
+      package: object(expression: "master:package.json") {
+        ... on Blob {
+          text
+        }
+      }
       tsconfig: object(expression: "master:tsconfig.json") {
         ... on Blob {
           text
@@ -21,5 +26,8 @@ export default async function (project: Project) {
   const tsconfig = repository.tsconfig
     ? JSON5.parse(repository.tsconfig.text)
     : null
-  return { tsconfig }
+  const packageJson = repository.package
+    ? JSON.parse(repository.package.text)
+    : null
+  return { tsconfig, packageJson }
 }

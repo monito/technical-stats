@@ -19,6 +19,7 @@ const QUERY_GITHUB_REPOSITORY = gql`
     repository(owner: $owner, name: $name) {
       url
       description
+      isArchived
     }
   }
 `
@@ -26,11 +27,12 @@ const QUERY_GITHUB_REPOSITORY = gql`
 export async function getRepository(project: Project) {
   const { owner, name } = project
   const { repository } = await client.request(QUERY_GITHUB_REPOSITORY, { owner, name })
-  const { url, description} = repository
+  const { url, description, isArchived } = repository
 
   return {
     url,
     description,
+    isArchived
   }
 }
 
