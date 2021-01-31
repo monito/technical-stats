@@ -1,11 +1,13 @@
 {
   "name": "technical-stats",
-  "version": "1.0.0",
+  "version": "1.0.0-beta",
   "repository": "https://github.com/monito/technical-stats.git",
-  "author": "",
+  "author": "tech@monito.com",
   "license": "MIT",
+  "main": "lib/cli/index.js",
   "scripts": {
     "start": "ts-node cli",
+    "build": "tsc",
     "viewer:serve": "parcel serve ./report-viewer/index.html",
     "viewer:build": "parcel build ./report-viewer/index.html"
   },

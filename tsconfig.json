@@ -4,6 +4,7 @@
         "moduleResolution": "node",
         "noImplicitAny": true,
         "removeComments": true,
+        "outDir": "lib",
         "preserveConstEnums": true,
         "sourceMap": true,
         "strict": true,
