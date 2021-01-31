@@ -7,7 +7,7 @@ module.exports = {
       name: 'github',
       url: 'https://api.github.com/graphql',
       headers: {
-        authorization: `Bearer ${process.env.GH_TOKEN}`,
+        authorization: `Bearer ${process.env.TECHNICAL_STATS_GITHUB_TOKEN}`,
       },
       skipSSLValidation: true,
     },
