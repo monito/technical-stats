@@ -5,7 +5,7 @@ import { Project, Config } from '../types'
 const QUERY_GITHUB_REPOSITORIES = gql`
   query GithubRepositories($organization: String!) {
     organization(login: $organization) {
-      repositories(last: 100) {
+      repositories(last: 10) {
         nodes {
           name
         }
@@ -39,5 +39,8 @@ export async function getRepository(project: Project) {
 export async function getRepositories(config: Config) {
   const { organization } = await client.request(QUERY_GITHUB_REPOSITORIES, { organization: config.organization })
   const orgRepositories: string[] = organization.repositories.nodes.map(({ name }: { name: string }) => `${config.organization}/${name}`)
-  return config.repositories || orgRepositories || []
+  const repos = config.repositories || orgRepositories || []
+  const exclude = config.excludeRepos || []
+
+  return repos.filter(repo => exclude.every(exclusion => !repo.includes(exclusion)))
 }

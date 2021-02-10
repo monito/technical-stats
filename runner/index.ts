@@ -26,14 +26,20 @@ async function runChecks(project: Project, config: Config): Promise<Check[]> {
   )
 }
 
+function sleep(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 export async function run(config: Config) {
   const repositories = await getRepositories(config)
 
-  console.log('Running plugins...')
+  console.log(`Running plugins for ${repositories.length} repositories...`)
   const projects = await Promise.all(
-    repositories.map(async (repo) => {
+    repositories.map(async (repo, index) => {
       const [owner, name] = repo.split('/')
       const project = { repo, owner, name }
+      await sleep(index * 250)
+      console.log(`Scanning ${repo}...`)
       const pluginsData = await runPlugins(project, config)
       return {
         ...project,
@@ -42,7 +48,7 @@ export async function run(config: Config) {
     })
   )
 
-  console.log('Running checks...')
+  console.log(`Running checks for ${projects.length} projects...`)
   const results = await Promise.all(
     projects.map(async (project) => {
       const { repo } = project
@@ -64,6 +70,7 @@ export async function run(config: Config) {
 
   return {
     projects: results.filter(project => project.active),
-    rules: config.rules.map(({ name, description }) => ({ name, description }))
+    rules: config.rules.map(({ name, description }) => ({ name, description })),
+    generatedAt: new Date().toISOString()
   }
 }

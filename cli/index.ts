@@ -2,7 +2,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { run } from '../runner'
 
-export { pluginDocker, pluginGithub, pluginTypescript } from '../runner/plugins'
+export { docker, github, typescript } from '../runner/plugins'
 
 export const cli = async (workingDirectory: string) => {
   const configPath = path.resolve(workingDirectory, 'stats.config.js')

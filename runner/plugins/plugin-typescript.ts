@@ -20,7 +20,7 @@ const QUERY = gql`
   }
 `
 
-export default async function (project: Project) {
+export async function typescript (project: Project) {
   const { owner, name } = project
   const { repository } = await client.request(QUERY, { owner, name })
   const tsconfig = repository.tsconfig

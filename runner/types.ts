@@ -14,6 +14,7 @@ type Plugin = <T extends Object>(project: Project) => T
 export interface Config {
   organization?: string
   repositories?: string[]
+  excludeRepos?: string[]
   plugins: Plugin[]
   rules: Goal[]
 }

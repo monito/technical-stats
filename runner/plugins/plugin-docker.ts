@@ -14,7 +14,7 @@ const QUERY = gql`
   }
 `
 
-export default async function (project: Project) {
+export async function docker (project: Project) {
   const { owner, name } = project
   const { repository } = await client.request(QUERY, { owner, name })
   if (!repository.dockerfile) {
