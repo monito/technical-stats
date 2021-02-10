@@ -5,7 +5,7 @@ import { Project, Config } from '../types'
 const QUERY_GITHUB_REPOSITORIES = gql`
   query GithubRepositories($organization: String!) {
     organization(login: $organization) {
-      repositories(last: 10) {
+      repositories(last: 100) {
         nodes {
           name
         }
@@ -20,6 +20,9 @@ const QUERY_GITHUB_REPOSITORY = gql`
       url
       description
       isArchived
+      defaultBranchRef {
+        name
+      }
     }
   }
 `
@@ -27,12 +30,13 @@ const QUERY_GITHUB_REPOSITORY = gql`
 export async function getRepository(project: Project) {
   const { owner, name } = project
   const { repository } = await client.request(QUERY_GITHUB_REPOSITORY, { owner, name })
-  const { url, description, isArchived } = repository
+  const { url, description, isArchived, defaultBranchRef } = repository
 
   return {
     url,
     description,
-    isArchived
+    isArchived,
+    defaultBranchName: defaultBranchRef.name,
   }
 }
 

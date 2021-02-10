@@ -1,11 +1,11 @@
 import { gql } from 'graphql-request'
 import { client } from '../core/api'
-import { Project } from '../types'
+import { PluginInput } from '../types'
 
 const QUERY = gql`
-  query Javascript($owner: String!, $name: String!) {
+  query Docker($owner: String!, $name: String!, $dockerfileLocation: String!) {
     repository(owner: $owner, name: $name) {
-      dockerfile: object(expression: "master:Dockerfile") {
+      dockerfile: object(expression: $dockerfileLocation) {
         ... on Blob {
           text
         }
@@ -14,9 +14,13 @@ const QUERY = gql`
   }
 `
 
-export async function docker (project: Project) {
-  const { owner, name } = project
-  const { repository } = await client.request(QUERY, { owner, name })
+export async function docker (project: PluginInput) {
+  const { owner, name, defaultBranchName } = project
+  const { repository } = await client.request(QUERY, {
+    owner,
+    name,
+    dockerfileLocation: `${defaultBranchName}:Dockerfile`
+  })
   if (!repository.dockerfile) {
     return {}
   }

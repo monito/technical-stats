@@ -1,11 +1,11 @@
 import { gql } from 'graphql-request'
 import { client } from '../core/api'
-import { Project } from '../types'
+import { PluginInput } from '../types'
 
 const QUERY = gql`
   query Github($owner: String!, $name: String!) {
     repository(owner: $owner, name: $name) {
-      languages(first: 20, orderBy: { direction: DESC, field: SIZE }) {
+      languages(first: 10, orderBy: { direction: DESC, field: SIZE }) {
         totalSize
         edges {
           size
@@ -18,7 +18,7 @@ const QUERY = gql`
   }
 `
 
-export async function github (project: Project) {
+export async function github (project: PluginInput) {
   const { owner, name } = project
   const { repository } = await client.request(QUERY, { owner, name })
   const { languages: repositoryLanguages } = repository

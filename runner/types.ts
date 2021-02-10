@@ -9,7 +9,7 @@ interface Goal {
   check(repo: Project): Promise<Check>
 }
 
-type Plugin = <T extends Object>(project: Project) => T
+type Plugin = <T extends Object>(project: PluginInput) => T
 
 export interface Config {
   organization?: string
@@ -25,9 +25,16 @@ export interface Project {
   name: string
 }
 
-export interface ProjectInfo {
-  repo: string
-  owner: string
-  name: string
-  [key: string]: string
+export type PluginInput = Project & {
+  defaultBranchName: string
+}
+
+export type PluginOtput = {
+  [key: string]: unknown
+}
+
+export type ProjectOutput = PluginInput & PluginOtput & {
+  active: boolean
+  url: string
+  description: string
 }
