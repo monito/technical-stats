@@ -1,6 +1,8 @@
-import { run } from '../runner'
 import * as fs from 'fs'
 import * as path from 'path'
+import { run } from '../runner'
+
+export { pluginDocker, pluginGithub, pluginTypescript } from '../runner/plugins'
 
 export const cli = async (workingDirectory: string) => {
   const configPath = path.resolve(workingDirectory, 'stats.config.js')
@@ -16,5 +18,5 @@ export const cli = async (workingDirectory: string) => {
 
   fs.writeFileSync(otputJson, JSON.stringify(report, null, 2))
   fs.writeFileSync(outputHtml, htmlReport)
-  console.log('generated report file at', outputHtml)
+  console.log('Generated report file at: ', outputHtml)
 }
