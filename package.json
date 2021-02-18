@@ -6,8 +6,8 @@
   "license": "MIT",
   "main": "lib/cli/index.js",
   "scripts": {
-    "start": "ts-node cli",
     "build": "tsc && cp -r ./report-viewer ./lib/report-viewer",
+    "cli:test": "ts-node cli/test",
     "viewer:serve": "parcel serve ./report-viewer/index.html",
     "viewer:build": "parcel build ./report-viewer/index.html"
   },

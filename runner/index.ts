@@ -75,7 +75,7 @@ export async function run(config: Config) {
 
   return {
     projects: results,
-    rules: config.rules.map(({ name, description }) => ({ name, description })),
+    rules: config.rules.map(({ name, description, link }) => ({ name, description, link })),
     generatedAt: new Date().toISOString()
   }
 }
