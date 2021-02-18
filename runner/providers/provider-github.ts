@@ -2,10 +2,12 @@ import { gql } from 'graphql-request'
 import { client } from '../core/api'
 import { Project, Config } from '../types'
 
+const DEFAULT_AMOUNT_OF_REPOS = 100
+
 const QUERY_GITHUB_REPOSITORIES = gql`
-  query GithubRepositories($organization: String!) {
+  query GithubRepositories($organization: String!, $amountOfRepos: Int!) {
     organization(login: $organization) {
-      repositories(last: 100) {
+      repositories(last: $amountOfRepos) {
         nodes {
           name
         }
@@ -41,10 +43,13 @@ export async function getRepository(project: Project) {
 }
 
 export async function getRepositories(config: Config) {
-  const { organization } = await client.request(QUERY_GITHUB_REPOSITORIES, { organization: config.organization })
+  const { organization } = await client.request(QUERY_GITHUB_REPOSITORIES, {
+    organization: config.organization,
+    amountOfRepos: config.amountOfRepos ?? DEFAULT_AMOUNT_OF_REPOS,
+  })
   const orgRepositories: string[] = organization.repositories.nodes.map(({ name }: { name: string }) => `${config.organization}/${name}`)
-  const repos = config.repositories || orgRepositories || []
-  const exclude = config.excludeRepos || []
+  const repos = config.repositories ?? orgRepositories ?? []
+  const exclude = config.excludeRepos ?? []
 
   return repos.filter(repo => exclude.every(exclusion => !repo.includes(exclusion)))
 }
