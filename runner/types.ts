@@ -6,6 +6,7 @@ export interface Check {
 interface Goal {
   name: string
   description: string
+  link?: string
   check(repo: Project): Promise<Check>
 }
 
@@ -13,6 +14,7 @@ type Plugin = <T extends Object>(project: PluginInput) => T
 
 export interface Config {
   organization?: string
+  amountOfRepos?: number
   repositories?: string[]
   excludeRepos?: string[]
   plugins: Plugin[]
