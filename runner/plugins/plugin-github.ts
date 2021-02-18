@@ -3,7 +3,7 @@ import { client } from '../core/api'
 import { PluginInput } from '../types'
 
 const QUERY = gql`
-  query Github($owner: String!, $name: String!) {
+  query Github($owner: String!, $name: String!, $prTemplatePath: String!) {
     repository(owner: $owner, name: $name) {
       languages(first: 10, orderBy: { direction: DESC, field: SIZE }) {
         totalSize
@@ -14,14 +14,26 @@ const QUERY = gql`
           }
         }
       }
+      prTemplate: object(expression: $prTemplatePath) {
+        ... on Blob {
+          text
+        }
+      }
     }
   }
 `
 
 export async function github (project: PluginInput) {
-  const { owner, name } = project
-  const { repository } = await client.request(QUERY, { owner, name })
-  const { languages: repositoryLanguages } = repository
+  const { owner, name, defaultBranchName } = project
+  const { repository } = await client.request(QUERY, {
+    owner,
+    name,
+    prTemplatePath: `${defaultBranchName}:.github/PULL_REQUEST_TEMPLATE.md`
+  })
+  const {
+    languages: repositoryLanguages,
+    prTemplate
+  } = repository
   const { totalSize } = repositoryLanguages
   const languages = repositoryLanguages.edges
     .map(({ size, node }: { size: number, node: { name: string } }) => ({
@@ -31,5 +43,6 @@ export async function github (project: PluginInput) {
 
   return {
     languages,
+    prTemplateLines: prTemplate?.text.split('\n')
   }
 }
