@@ -1,6 +1,7 @@
 import 'dotenv/config'
-import { Config, Project, PluginInput, PluginOtput, ProjectOutput, Check } from './types'
+import { Config, Project, PluginInput, PluginOtput, ProjectOutput, Check, Status } from './types'
 import { getRepositories, getRepository } from './providers/provider-github'
+import { calculateStats } from './features'
 
 const SERVICE_SCAN_TIMEOUT = 100
 
@@ -15,7 +16,7 @@ async function runPlugins(project: PluginInput, config: Config): Promise<PluginO
 
 async function runChecks(project: Project, config: Config): Promise<Check[]> {
   return Promise.all(
-    config.rules.map(async ({ check }): Promise<Check> => {
+    config.goals.map(async ({ check }): Promise<Check> => {
       try {
         return await check(project)
       } catch(err) {
@@ -66,16 +67,21 @@ export async function run(config: Config) {
   const results = await Promise.all(
     filteredProject
     .map(async (project) => {
+      const checks = await runChecks(project, config)
+      const { stats, percentage } = calculateStats(checks)
+
       return {
         ...project,
-        rules: await runChecks(project, config),
+        stats,
+        achieved: config.checkAchieved(percentage),
+        checks,
       }
     })
   )
 
   return {
     projects: results,
-    rules: config.rules.map(({ name, description, link }) => ({ name, description, link })),
+    goals: config.goals.map(({ name, description, link }) => ({ name, description, link })),
     generatedAt: new Date().toISOString()
   }
 }

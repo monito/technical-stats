@@ -25,8 +25,9 @@ export async function docker (project: PluginInput) {
     return {}
   }
   const dockerfile = repository.dockerfile.text
-  const image = dockerfile.split('\n')[0].substring(5)
-  const imageVersion = image.substring(image.indexOf(':') + 1)
+  const image: string = dockerfile.split('\n')[0].split('FROM ')[1]
+  const versionResults = /.*:(\S+)\s?.*/.exec(image)
+  const imageVersion = versionResults && versionResults[1]
   return {
     image,
     imageVersion

@@ -3,6 +3,7 @@ import * as path from 'path'
 import { run } from '../runner'
 
 export * from '../runner/plugins'
+export * as utils from '../runner/utils'
 
 export const cli = async (workingDirectory: string) => {
   const configPath = path.resolve(workingDirectory, 'stats.config.js')

@@ -29,7 +29,7 @@ Add `.env` file containing Github token.
 TECHNICAL_STATS_GITHUB_TOKEN=
 ```
 
-Configure rules.
+Configure goals.
 ```js
 // stats.config.js
 const { pluginTypescript } = require('@monito/technical-stats')
@@ -39,7 +39,7 @@ module.exports = {
   plugins: {
     pluginTypescript,
   },
-  rules: [
+  goals: [
     {
       name: 'Typescript Strict',
       description: 'Should use a strict Typescript config',

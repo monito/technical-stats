@@ -1,5 +1,7 @@
+export type Status = 'pass' | 'warn' | 'fail' | 'error' | 'skip'
+
 export interface Check {
-  status: 'pass' | 'warn' | 'fail' | 'error' | 'skip'
+  status: Status
   value?: string | number | undefined
 }
 
@@ -7,6 +9,7 @@ interface Goal {
   name: string
   description: string
   link?: string
+  only?: boolean
   check(repo: Project): Promise<Check>
 }
 
@@ -18,7 +21,8 @@ export interface Config {
   repositories?: string[]
   excludeRepos?: string[]
   plugins: Plugin[]
-  rules: Goal[]
+  checkAchieved(percentage: number): Check
+  goals: Goal[]
 }
 
 export interface Project {
