@@ -2,7 +2,7 @@ import 'dotenv/config'
 import { Config, Project, PluginInput, PluginOtput, ProjectOutput, Check } from './types'
 import { getRepositories, getRepository } from './providers/provider-github'
 
-const SERVICE_SCAN_TIMEOUT = 250
+const SERVICE_SCAN_TIMEOUT = 100
 
 async function runPlugins(project: PluginInput, config: Config): Promise<PluginOtput> {
   const data = await Promise.all(
