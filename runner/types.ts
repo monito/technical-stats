@@ -5,6 +5,10 @@ export interface Check {
   value?: string | number | undefined
 }
 
+export interface CheckOutput extends Check {
+  name: string
+}
+
 interface Goal {
   name: string
   description: string
@@ -35,11 +39,11 @@ export type PluginInput = Project & {
   defaultBranchName: string
 }
 
-export type PluginOtput = {
+export type PluginOutput = {
   [key: string]: unknown
 }
 
-export type ProjectOutput = PluginInput & PluginOtput & {
+export type ProjectOutput = PluginInput & PluginOutput & {
   active: boolean
   url: string
   description: string

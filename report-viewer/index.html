@@ -18,13 +18,22 @@
     <div id="app" v-cloak>
       <div class="p-6">
         <div class="p-2 text-gray-500">
-          generated at: {{ report.generatedAt }}
+          <span>
+            generated at: {{ report.generatedAt }}
+          </span>
+          <span v-if="sorting.direction" class="font-semibold">
+            sorted by {{ sorting.column }} in {{ sorting.direction }} direction
+          </span>
+          <span v-else class="font-semibold">
+            click by column for sorting
+          </span>
         </div>
         <div class="shadow rounded max-h-screen overflow-auto">
           <table class="min-w-full divide-y divide-gray-200">
-            <thead>
+            <thead class="cursor-pointer">
               <th
                 class="px-6 py-3 sticky left-0 top-0 z-20 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                @click="sortByName()"
               >
                 Name
               </th>
@@ -34,6 +43,7 @@
                 :class="{ 'text-blue-500 hover:underline': goal.link }"
                 :key="goal.name"
                 :title="goal.description"
+                @click="sortByGoal(goal.name)"
               >
                 <a :href="goal.link" target="_blank">
                   {{ goal.name }}
@@ -41,6 +51,7 @@
               </th>
               <th
                 class="px-6 py-3 sticky right-0 top-0 z-20 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                @click="sortByAchieved()"
               >
                 Achieved
               </th>
@@ -140,6 +151,37 @@
         data() {
           return {
             report: window.REPORT_JSON,
+          }
+        },
+        methods: {
+          sortByGoal(goal) {
+            const statusSorting = { error: 1, skip: 2, fail: 3, warn: 4, pass: 5 }
+            const getStatus = (project) => statusSorting[project.checks.find(check => check.name === goal).status]
+            this.sortProjects(getStatus, goal)
+          },
+          sortByName() {
+            const getName = (project) => project.repo
+            this.sortProjects(getName, 'Name')
+          },
+          sortByAchieved() {
+            const getAchieved = (project) => project.achieved.value
+            this.sortProjects(getAchieved, 'Achieved')
+          },
+          sortProjects(getValueFunc, column) {
+            if (this.sorting.direction === '') {
+              this.sorting.direction = 'ASCENDING'
+            } else {
+              this.sorting.direction = this.sorting.direction === 'ASCENDING'
+                ? 'DESCENDING'
+                : 'ASCENDING'
+            }
+
+            const sortFunc = this.sorting.direction === 'ASCENDING'
+              ? (a, b) => getValueFunc(a) > getValueFunc(b) ? 1 : -1
+              : (a, b) => getValueFunc(a) > getValueFunc(b) ? -1 : 1
+
+            this.sorting.column = column.toUpperCase()
+            this.report.projects = this.report.projects.sort(sortFunc)
           }
         }
       }).mount('#app')

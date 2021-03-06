@@ -1,11 +1,11 @@
 import 'dotenv/config'
-import { Config, Project, PluginInput, PluginOtput, ProjectOutput, Check, Status } from './types'
+import { Config, Project, PluginInput, PluginOutput, ProjectOutput, CheckOutput } from './types'
 import { getRepositories, getRepository } from './providers/provider-github'
 import { calculateStats } from './features'
 
 const SERVICE_SCAN_TIMEOUT = 100
 
-async function runPlugins(project: PluginInput, config: Config): Promise<PluginOtput> {
+async function runPlugins(project: PluginInput, config: Config): Promise<PluginOutput> {
   const data = await Promise.all(
     Object.entries(config.plugins).map(async ([name, plugin]) => {
       return [name, await plugin(project)]
@@ -14,13 +14,18 @@ async function runPlugins(project: PluginInput, config: Config): Promise<PluginO
   return Object.fromEntries(data)
 }
 
-async function runChecks(project: Project, config: Config): Promise<Check[]> {
+async function runChecks(project: Project, config: Config): Promise<CheckOutput[]> {
   return Promise.all(
-    config.goals.map(async ({ check }): Promise<Check> => {
+    config.goals.map(async ({ check, name }): Promise<CheckOutput> => {
       try {
-        return await check(project)
+        const checkResult = await check(project)
+        return {
+          ...checkResult,
+          name,
+        }
       } catch(err) {
         return {
+          name,
           status: 'error',
           value: err.message
         }
@@ -71,7 +76,9 @@ export async function run(config: Config) {
       const { stats, percentage } = calculateStats(checks)
 
       return {
-        ...project,
+        repo: project.repo,
+        description: project.description,
+        url: project.url,
         stats,
         achieved: config.checkAchieved(percentage),
         checks,
