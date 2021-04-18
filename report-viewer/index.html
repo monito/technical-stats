@@ -18,16 +18,19 @@
     <div id="app" v-cloak>
       <div class="p-6 max-h-screen flex flex-col">
         <div class="px-2 pb-4 space-x-6 text-gray-500">
-          <span class="font-semibold">
+          <span>
+            organization: {{ report.organization }}
+          </span>
+          <span>
             total achieved: <achieved-badge :achieved="report.totalAchieved"></achieved-badge>
           </span>
           <span>
             generated at: {{ report.generatedAt }}
           </span>
-          <span v-if="sorting.direction" class="font-semibold">
+          <span v-if="sorting.direction">
             sorted by {{ sorting.column }} in {{ sorting.direction }} direction
           </span>
-          <span v-else class="font-semibold">
+          <span v-else>
             click by column for sorting
           </span>
         </div>

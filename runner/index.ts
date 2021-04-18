@@ -113,10 +113,11 @@ export async function run(config: Config): Promise<Output> {
   const { stats, achieved } = calculateStats(allChecks, config)
 
   return {
-    projects,
-    goals,
-    stats,
+    organization: config.organization,
+    generatedAt: new Date().toISOString(),
     totalAchieved: achieved,
-    generatedAt: new Date().toISOString()
+    stats,
+    goals,
+    projects,
   }
 }

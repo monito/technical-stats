@@ -3,6 +3,6 @@ node_modules
 .env
 .DS_Store
 
-report.json
-report.html
+report*.json
+report*.html
 stats.config.js

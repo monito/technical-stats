@@ -23,12 +23,12 @@ export interface Goal {
 type Plugin = <T extends Object>(project: PluginInput) => T
 
 export interface Config {
-  organization?: string
+  organization: string
   amountOfRepos?: number
   repositories?: string[]
   excludeRepos?: string[]
-  plugins: Plugin[]
   checkAchieved(percentage: number): Check
+  plugins: Plugin[]
   goals: Goal[]
 }
 
@@ -75,6 +75,7 @@ export interface GoalOutput extends StatsOutput {
 }
 
 export interface Output {
+  organization: string
   projects: ProjectOutput[]
   goals: GoalOutput[]
   stats: Stats
