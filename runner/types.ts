@@ -1,5 +1,7 @@
 export type Status = 'pass' | 'warn' | 'fail' | 'error' | 'skip'
 
+export type Stats = Record<Status, number>
+
 export interface Check {
   status: Status
   value?: string | number | undefined
@@ -7,9 +9,10 @@ export interface Check {
 
 export interface CheckOutput extends Check {
   name: string
+  repo: string
 }
 
-interface Goal {
+export interface Goal {
   name: string
   description: string
   link?: string
@@ -43,8 +46,38 @@ export type PluginOutput = {
   [key: string]: unknown
 }
 
-export type ProjectOutput = PluginInput & PluginOutput & {
+export type ProjectScanned = PluginInput & PluginOutput & {
   active: boolean
   url: string
   description: string
+}
+
+export interface StatsOutput {
+  stats: Stats
+  percentage: number
+  achieved: Check
+}
+
+export interface ProjectOutput extends StatsOutput {
+  repo: string
+  description: string
+  url: string
+  checks: CheckOutput[]
+}
+
+export interface GoalOutput extends StatsOutput {
+  name: string
+  description: string
+  link?: string
+  checks: CheckOutput[]
+  stats: Stats
+  achieved: Check
+}
+
+export interface Output {
+  projects: ProjectOutput[]
+  goals: GoalOutput[]
+  stats: Stats
+  totalAchieved: Check
+  generatedAt: string
 }
