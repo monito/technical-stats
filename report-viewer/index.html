@@ -16,8 +16,8 @@
   </head>
   <body class="antialiased font-sans bg-gray-100">
     <div id="app" v-cloak>
-      <div class="p-6">
-        <div class="p-2 text-gray-500">
+      <div class="p-6 max-h-screen flex flex-col">
+        <div class="px-2 pb-4 text-gray-500">
           <span>
             generated at: {{ report.generatedAt }}
           </span>
@@ -28,7 +28,7 @@
             click by column for sorting
           </span>
         </div>
-        <div class="shadow rounded max-h-screen overflow-auto">
+        <div class="shadow rounded overflow-auto">
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="cursor-pointer">
               <th
