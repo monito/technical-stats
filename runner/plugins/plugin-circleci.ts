@@ -1,4 +1,5 @@
 import { gql } from 'graphql-request'
+import * as YAML from 'yaml'
 import { client } from '../core/api'
 import { PluginInput } from '../types'
 
@@ -14,20 +15,15 @@ const QUERY = gql`
   }
 `
 
-export async function circleci (project: PluginInput) {
+export async function circleci(project: PluginInput) {
   const { owner, name, defaultBranchName } = project
   const { repository } = await client.request(QUERY, {
     owner,
     name,
-    configPath: `${defaultBranchName}:.circleci/config.yml`
+    configPath: `${defaultBranchName}:.circleci/config.yml`,
   })
   if (!repository.circleciConfig) {
     return {}
   }
-  const circleciConfig = repository.circleciConfig.text
-  const firstLine = circleciConfig.split('\n')[0]
-  const configVersion = firstLine.split(':').pop().trim()
-  return {
-    configVersion
-  }
+  return YAML.parse(repository.circleciConfig.text)
 }

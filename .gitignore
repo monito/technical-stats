@@ -2,6 +2,8 @@ lib
 node_modules
 .env
 .DS_Store
+.history
+.vscode
 
 report*.json
 report*.html

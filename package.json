@@ -1,6 +1,6 @@
 {
   "name": "@monito/technical-stats",
-  "version": "1.0.0-beta.12",
+  "version": "1.0.0-beta.13",
   "repository": "https://github.com/monito/technical-stats.git",
   "author": "tech@monito.com",
   "license": "MIT",
@@ -16,7 +16,8 @@
     "dotenv": "^8.2.0",
     "graphql": "^15.5.0",
     "graphql-request": "^3.4.0",
-    "json5": "^2.2.0"
+    "json5": "^2.2.0",
+    "yaml": "^1.10.2"
   },
   "devDependencies": {
     "@types/json5": "^0.0.30",
