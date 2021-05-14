@@ -1,7 +1,7 @@
 import { gql } from 'graphql-request'
+import * as YAML from 'yaml'
 import { client } from '../core/api'
 import { PluginInput } from '../types'
-import * as YAML from 'yaml'
 
 const QUERY = gql`
   query CircleCi($owner: String!, $name: String!, $configPath: String!) {
