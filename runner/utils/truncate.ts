@@ -1,5 +1,12 @@
 export function truncate (input: string, length: number) {
-  return input.length > length
-    ? `${input.substring(0, length)}...`
-    : input
+  if (input.length <= length) {
+    return input
+  }
+
+  const truncated = `${input.substring(0, length)}...`
+  if (truncated.length >= input.length) {
+    return input
+  }
+
+  return truncated
 }
