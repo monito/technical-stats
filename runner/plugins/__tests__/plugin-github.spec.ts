@@ -1,4 +1,5 @@
 import { github } from '../plugin-github'
+import { client } from '../../core/api'
 
 jest.mock('../../core/api')
 
@@ -11,7 +12,19 @@ describe('github', () => {
       defaultBranchName: 'main',
     })
 
-  it('fetches pr template and its lines', async () => {
+  it('returns no information if not languages and PR template found', async () => {
+    const request = client.request as unknown as jest.Mock
+    request.mockImplementationOnce(() =>
+      Promise.resolve({
+        repository: {},
+      })
+    )
+    const output = await runPlugin()
+
+    expect(output).toEqual({ languages: [], prTemplateLines: undefined })
+  })
+
+  it('fetches PR template and its lines', async () => {
     const output = await runPlugin()
     expect(output.prTemplateLines).toEqual(['# Title'])
   })

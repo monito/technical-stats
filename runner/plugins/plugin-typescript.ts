@@ -31,9 +31,9 @@ export async function typescript (project: PluginInput) {
 
   const tsconfig = repository.tsconfig
     ? JSON5.parse(repository.tsconfig.text)
-    : null
+    : undefined
   const packageJson = repository.package
     ? JSON.parse(repository.package.text)
-    : null
+    : undefined
   return { tsconfig, packageJson }
 }

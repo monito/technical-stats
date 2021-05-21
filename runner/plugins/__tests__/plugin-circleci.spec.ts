@@ -12,7 +12,8 @@ describe('circleci', () => {
   })
 
   it('return empty object if no circle ci config was found', async () => {
-    (client.request as unknown as jest.Mock).mockImplementationOnce(() => Promise.resolve({
+    const request = client.request as unknown as jest.Mock
+    request.mockImplementationOnce(() => Promise.resolve({
       repository: {
         circleciConfig: undefined
       }

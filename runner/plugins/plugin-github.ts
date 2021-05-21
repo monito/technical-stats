@@ -34,8 +34,8 @@ export async function github (project: PluginInput) {
     languages: repositoryLanguages,
     prTemplate
   } = repository
-  const { totalSize } = repositoryLanguages
-  const languages = repositoryLanguages.edges
+  const { totalSize = 0, edges = [] } = repositoryLanguages || {}
+  const languages = edges
     .map(({ size, node }: { size: number, node: { name: string } }) => ({
       name: node.name,
       percentage: (size / totalSize) * 100,

@@ -1,4 +1,5 @@
 import { typescript } from '../plugin-typescript'
+import { client } from '../../core/api'
 
 jest.mock('../../core/api')
 
@@ -10,6 +11,18 @@ describe('typescript', () => {
       name: 'technical-stats',
       defaultBranchName: 'main',
     })
+
+  it('returns no information if no package.json or tsconfig.json found', async () => {
+    const request = client.request as unknown as jest.Mock
+    request.mockImplementationOnce(() =>
+      Promise.resolve({
+        repository: {},
+      })
+    )
+    const output = await runPlugin()
+
+    expect(output).toEqual({ packageJson: undefined, tsconfig: undefined })
+  })
 
   it('fetches package.json', async () => {
     const output = await runPlugin()
