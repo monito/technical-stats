@@ -1,17 +1,7 @@
 import { circleci } from '../plugin-circleci'
 import { client } from '../../core/api'
 
-jest.mock('../../core/api', () => ({
-  client: {
-    request: jest.fn().mockImplementation(() => Promise.resolve({
-      repository: {
-        circleciConfig: {
-          text: 'version: 2.1'
-        }
-      }
-    }))
-  }
-}))
+jest.mock('../../core/api')
 
 describe('circleci', () => {
   const runPlugin = async () => await circleci({

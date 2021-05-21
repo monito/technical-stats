@@ -1,17 +1,7 @@
 import { docker } from '../plugin-docker'
 import { client } from '../../core/api'
 
-jest.mock('../../core/api', () => ({
-  client: {
-    request: jest.fn().mockImplementation(() => Promise.resolve({
-      repository: {
-        dockerfile: {
-          text: 'FROM node:12-slim'
-        }
-      }
-    }))
-  }
-}))
+jest.mock('../../core/api')
 
 describe('docker', () => {
   const runPlugin = async () => await docker({
