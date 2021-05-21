@@ -20,7 +20,7 @@ export interface Goal {
   check(repo: Project): Promise<Check>
 }
 
-type Plugin = <T extends Object>(project: PluginInput) => T
+export type Plugin = (project: PluginInput) => unknown
 
 export interface Config {
   organization: string
@@ -28,7 +28,7 @@ export interface Config {
   repositories?: string[]
   excludeRepos?: string[]
   checkAchieved(percentage: number): Check
-  plugins: Plugin[]
+  plugins: Record<string, Plugin>
   goals: Goal[]
 }
 

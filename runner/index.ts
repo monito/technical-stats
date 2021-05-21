@@ -1,18 +1,11 @@
 import 'dotenv/config'
-import { Config, Project, PluginInput, PluginOutput, ProjectScanned, CheckOutput, GoalOutput, Output } from './types'
+import { Config, Project, ProjectScanned, CheckOutput, GoalOutput, Output } from './types'
 import { getRepositories, getRepository } from './providers/provider-github'
 import { calculateStats } from './features'
+import { runPlugins } from './plugins'
+import { sleep } from './utils'
 
 const SERVICE_SCAN_TIMEOUT = 100
-
-async function runPlugins(project: PluginInput, config: Config): Promise<PluginOutput> {
-  const data = await Promise.all(
-    Object.entries(config.plugins).map(async ([name, plugin]) => {
-      return [name, await plugin(project)]
-    })
-  )
-  return Object.fromEntries(data)
-}
 
 async function runChecks(project: Project, config: Config): Promise<CheckOutput[]> {
   return Promise.all(
@@ -34,10 +27,6 @@ async function runChecks(project: Project, config: Config): Promise<CheckOutput[
       }
     })
   )
-}
-
-function sleep(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 export async function run(config: Config): Promise<Output> {
