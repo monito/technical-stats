@@ -74,7 +74,7 @@ export interface GoalOutput extends StatsOutput {
   achieved: Check
 }
 
-export interface Output {
+export interface Report {
   organization: string
   projects: ProjectOutput[]
   goals: GoalOutput[]
