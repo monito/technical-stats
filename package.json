@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsc && cp -r ./report-viewer ./lib/report-viewer",
     "cli:test": "ts-node cli/integration",
-    "test": "jest",
+    "test": "jest --coverage",
     "viewer:serve": "parcel serve ./report-viewer/index.html",
     "viewer:build": "parcel build ./report-viewer/index.html",
     "commit": "git-cz"
