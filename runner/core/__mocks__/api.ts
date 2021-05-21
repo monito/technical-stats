@@ -1,7 +1,20 @@
 export const client = {
   request: jest.fn().mockImplementation(() =>
     Promise.resolve({
+      organization: {
+        repositories: {
+          nodes: [
+            { name: 'technical-stats' }
+          ],
+        }
+      },
       repository: {
+        url: 'https://github.com/monito/technical-stats',
+        description: 'Tool to generate reports capturing stats of repositories in GitHub organisation 💚',
+        isArchived: false,
+        defaultBranchRef: {
+          name: 'main'
+        },
         circleciConfig: {
           text: 'version: 2.1'
         },

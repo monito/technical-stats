@@ -31,7 +31,10 @@ const QUERY_GITHUB_REPOSITORY = gql`
 
 export async function getRepository(project: Project) {
   const { owner, name } = project
-  const { repository } = await client.request(QUERY_GITHUB_REPOSITORY, { owner, name })
+  const { repository } = await client.request(QUERY_GITHUB_REPOSITORY, {
+    owner,
+    name,
+  })
   const { url, description, isArchived, defaultBranchRef } = repository
 
   return {
@@ -42,14 +45,23 @@ export async function getRepository(project: Project) {
   }
 }
 
-export async function getRepositories(config: Config) {
+export async function getRepositories(
+  config: Pick<
+    Config,
+    'organization' | 'amountOfRepos' | 'repositories' | 'excludeRepos'
+  >
+) {
   const { organization } = await client.request(QUERY_GITHUB_REPOSITORIES, {
     organization: config.organization,
     amountOfRepos: config.amountOfRepos ?? DEFAULT_AMOUNT_OF_REPOS,
   })
-  const orgRepositories: string[] = organization.repositories.nodes.map(({ name }: { name: string }) => `${config.organization}/${name}`)
+  const orgRepositories: string[] = organization.repositories.nodes.map(
+    ({ name }: { name: string }) => `${config.organization}/${name}`
+  )
   const repos = config.repositories ?? orgRepositories ?? []
   const exclude = config.excludeRepos ?? []
 
-  return repos.filter(repo => exclude.every(exclusion => !repo.includes(exclusion)))
+  return repos.filter((repo) =>
+    exclude.every((exclusion) => !repo.includes(exclusion))
+  )
 }
