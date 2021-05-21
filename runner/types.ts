@@ -17,7 +17,7 @@ export interface Goal {
   description: string
   link?: string
   only?: boolean
-  check(repo: Project): Promise<Check>
+  check(repo: ProjectScanned): Promise<Check>
 }
 
 export type Plugin = (project: PluginInput) => unknown

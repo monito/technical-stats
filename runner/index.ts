@@ -1,33 +1,11 @@
 import 'dotenv/config'
 import { Config, Project, ProjectScanned, CheckOutput, GoalOutput, Output } from './types'
 import { getRepositories, getRepository } from './providers/provider-github'
-import { calculateStats } from './features'
+import { calculateStats, runChecks } from './features'
 import { runPlugins } from './plugins'
 import { sleep } from './utils'
 
 const SERVICE_SCAN_TIMEOUT = 100
-
-async function runChecks(project: Project, config: Config): Promise<CheckOutput[]> {
-  return Promise.all(
-    config.goals.map(async ({ check, name }): Promise<CheckOutput> => {
-      try {
-        const checkResult = await check(project)
-        return {
-          ...checkResult,
-          name,
-          repo: project.repo
-        }
-      } catch (err) {
-        return {
-          status: 'error',
-          value: err.message,
-          name,
-          repo: project.repo
-        }
-      }
-    })
-  )
-}
 
 export async function run(config: Config): Promise<Output> {
   const repositories = await getRepositories(config)
