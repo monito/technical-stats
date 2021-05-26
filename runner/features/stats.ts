@@ -10,7 +10,7 @@ function calculatePercentage(stats: Stats) {
   return round((progress / total) * 100)
 }
 
-export function calculateStats(checks: Check[], config: Config): StatsOutput {
+export function calculateStats(checks: Check[], config: Pick<Config, 'checkAchieved'>): StatsOutput {
   const stats: Stats = { pass: 0, warn: 0, fail: 0, error: 0, skip: 0 }
   checks.forEach(check => stats[check.status] += 1)
   const percentage = calculatePercentage(stats)

@@ -1,0 +1,107 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`runner can generate report without goald specified 1`] = `
+Object {
+  "generatedAt": "2021-05-25T12:24:07.608Z",
+  "goals": Array [],
+  "organization": "monito",
+  "projects": Array [
+    Object {
+      "achieved": Object {
+        "status": "fail",
+      },
+      "checks": Array [],
+      "description": "Tool to generate reports capturing stats of repositories in GitHub organisation 💚",
+      "percentage": 0,
+      "repo": "monito/technical-stats",
+      "stats": Object {
+        "error": 0,
+        "fail": 0,
+        "pass": 0,
+        "skip": 0,
+        "warn": 0,
+      },
+      "url": "https://github.com/monito/technical-stats",
+    },
+  ],
+  "stats": Object {
+    "error": 0,
+    "fail": 0,
+    "pass": 0,
+    "skip": 0,
+    "warn": 0,
+  },
+  "totalAchieved": Object {
+    "status": "fail",
+  },
+}
+`;
+
+exports[`runner can generate report without goald specified 2`] = `
+Object {
+  "generatedAt": "2021-05-25T12:24:07.613Z",
+  "goals": Array [
+    Object {
+      "achieved": Object {
+        "status": "pass",
+      },
+      "checks": Array [
+        Object {
+          "name": "main branch",
+          "repo": "monito/technical-stats",
+          "status": "pass",
+          "value": "main",
+        },
+      ],
+      "description": "the project is using main branch",
+      "link": undefined,
+      "name": "main branch",
+      "percentage": 100,
+      "stats": Object {
+        "error": 0,
+        "fail": 0,
+        "pass": 1,
+        "skip": 0,
+        "warn": 0,
+      },
+    },
+  ],
+  "organization": "monito",
+  "projects": Array [
+    Object {
+      "achieved": Object {
+        "status": "pass",
+      },
+      "checks": Array [
+        Object {
+          "name": "main branch",
+          "repo": "monito/technical-stats",
+          "status": "pass",
+          "value": "main",
+        },
+      ],
+      "description": "Tool to generate reports capturing stats of repositories in GitHub organisation 💚",
+      "percentage": 100,
+      "repo": "monito/technical-stats",
+      "stats": Object {
+        "error": 0,
+        "fail": 0,
+        "pass": 1,
+        "skip": 0,
+        "warn": 0,
+      },
+      "url": "https://github.com/monito/technical-stats",
+    },
+  ],
+  "stats": Object {
+    "error": 0,
+    "fail": 0,
+    "pass": 1,
+    "skip": 0,
+    "warn": 0,
+  },
+  "totalAchieved": Object {
+    "status": "pass",
+  },
+}
+`;
