@@ -5,8 +5,8 @@ import { run } from '../runner'
 export * from '../runner/plugins'
 export * as utils from '../runner/utils'
 
-function saveReport(workingDirectory: string, fileName: string, fileContent: string) {
-  const outputFile = path.resolve(workingDirectory, fileName)
+function saveReport(directory: string, fileName: string, fileContent: string) {
+  const outputFile = path.resolve(directory, fileName)
   fs.writeFileSync(outputFile, fileContent)
   console.log('Generated report file at: ', fileName)
 }
