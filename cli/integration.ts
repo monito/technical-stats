@@ -1,3 +1,3 @@
 import { cli } from './index'
 
-cli(__dirname)
+cli(__dirname, 'output')
