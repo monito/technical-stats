@@ -25,8 +25,9 @@ export const cli = async (workingDirectory: string, outputDirectory?: string) =>
   const now = new Date()
   const date = `${now.getUTCFullYear()}-${now.getUTCMonth() + 1}-${now.getUTCDate()}`
 
-  saveReport(outputDirectory || workingDirectory, 'report.html', htmlReport)
-  saveReport(outputDirectory || workingDirectory, 'report.json', jsonReport)
-  saveReport(outputDirectory || workingDirectory, `report-${date}.html`, htmlReport)
-  saveReport(outputDirectory || workingDirectory, `report-${date}.json`, jsonReport)
+  const out = outputDirectory || workingDirectory
+  saveReport(out, 'report.html', htmlReport)
+  saveReport(out, 'report.json', jsonReport)
+  saveReport(out, `report-${date}.html`, htmlReport)
+  saveReport(out, `report-${date}.json`, jsonReport)
 }
