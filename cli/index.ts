@@ -11,7 +11,7 @@ function saveReport(workingDirectory: string, fileName: string, fileContent: str
   console.log('Generated report file at: ', fileName)
 }
 
-export const cli = async (workingDirectory: string) => {
+export const cli = async (workingDirectory: string, outputDirectory?: string) => {
   const configPath = path.resolve(workingDirectory, 'stats.config.js')
   const config = require(configPath)
   const report = await run(config)
@@ -25,8 +25,8 @@ export const cli = async (workingDirectory: string) => {
   const now = new Date()
   const date = `${now.getUTCFullYear()}-${now.getUTCMonth() + 1}-${now.getUTCDate()}`
 
-  saveReport(workingDirectory, 'report.html', htmlReport)
-  saveReport(workingDirectory, 'report.json', jsonReport)
-  saveReport(workingDirectory, `report-${date}.html`, htmlReport)
-  saveReport(workingDirectory, `report-${date}.json`, jsonReport)
+  saveReport(outputDirectory || workingDirectory, 'report.html', htmlReport)
+  saveReport(outputDirectory || workingDirectory, 'report.json', jsonReport)
+  saveReport(outputDirectory || workingDirectory, `report-${date}.html`, htmlReport)
+  saveReport(outputDirectory || workingDirectory, `report-${date}.json`, jsonReport)
 }

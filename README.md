@@ -26,7 +26,8 @@ Configure `package.json` to run cli tool
 
 // generate-stats.js
 const { cli } = require('@monito/technical-stats')
-cli(__dirname)
+cli(__dirname, 'output') // second parameter is optional, if undefined, it will output in the __dirname folder
+
 ```
 
 Add `.env` file containing Github token.
@@ -129,4 +130,4 @@ module.exports = {
 
 See the [Config type](https://github.com/monito/technical-stats/blob/e7b3fafc3f06aad62f537c646ec2bd8aaf1b21c4/runner/types.ts#L25)
 
-Reports are going to be created in the `./cli` directory
+Reports are going to be created in the `./output` directory

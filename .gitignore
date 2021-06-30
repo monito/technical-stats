@@ -10,3 +10,4 @@ node_modules
 report*.json
 report*.html
 stats.config.js
+output
