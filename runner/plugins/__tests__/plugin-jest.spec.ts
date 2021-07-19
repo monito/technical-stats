@@ -12,21 +12,12 @@ describe('jest', () => {
       defaultBranchName: 'main',
     })
 
-  it('return empty object if no jest config was found', async () => {
-    const request = client.request as unknown as jest.Mock
-    const notFoundCallback = () =>
-      Promise.resolve({
-        repository: {
-          jestConfig: undefined,
-        },
-      })
-    request
-      .mockImplementationOnce(notFoundCallback) // for jest.config.js
-      .mockImplementationOnce(notFoundCallback) // for jest.config.base.js
-    const output = await runPlugin()
-
-    expect(output).toEqual({})
-  })
+  const notFoundCallback = () =>
+    Promise.resolve({
+      repository: {
+        jestConfig: undefined,
+      },
+    })
 
   const COVERAGE_THRESHOLD_MATCH = {
     coverageThreshold: {
@@ -39,21 +30,72 @@ describe('jest', () => {
     },
   }
 
-  it('fetches jest config and parses it', async () => {
+  const jestConfigFile = () =>
+    Promise.resolve({
+      repository: {
+        jestConfig: {
+          text: `module.exports = {
+  transform: {
+    '.(ts|tsx|js)': 'ts-jest',
+  },
+  roots: ['<rootDir>/src/', '<rootDir>/__tests__/'],
+  testEnvironment: 'node',
+  testRegex: '(/__tests__/.*\\.(test|spec))\\.(ts|tsx|js)$',
+  moduleFileExtensions: ['ts', 'tsx', 'js'],
+  modulePathIgnorePatterns: ['lib'],
+  coveragePathIgnorePatterns: ['/node_modules/', '/__tests__/'],
+  coverageThreshold:${JSON.stringify(
+    COVERAGE_THRESHOLD_MATCH.coverageThreshold
+  )},
+  collectCoverage: true,
+  collectCoverageFrom: ['src/**.{js,ts}'],
+  reporters: [
+    'default',
+    [
+      'jest-junit',
+      {
+        suiteName: 'jest unit tests',
+        outputDirectory: 'junit',
+        outputName: 'user-id-test.xml',
+        classNameTemplate: '{classname}',
+        titleTemplate: '{classname} {title}',
+        ancestorSeparator: ' › ',
+        usePathForSuiteName: 'true',
+      },
+    ],
+  ],
+  verbose: true,
+}
+          `,
+        },
+      },
+    })
+  it('return empty object if no jest config was found', async () => {
+    const request = client.request as unknown as jest.Mock
+    request
+      .mockImplementationOnce(notFoundCallback) // for jest.config.js
+      .mockImplementationOnce(notFoundCallback) // for jest.config.base.js
+
+    const output = await runPlugin()
+
+    expect(output).toEqual({})
+  })
+
+  it('fetches the base config if config not found', async () => {
+    const request = client.request as unknown as jest.Mock
+    request
+      .mockImplementationOnce(notFoundCallback) // for jest.config.js
+      .mockImplementationOnce(jestConfigFile)
+
     const output = await runPlugin()
 
     expect(output).toMatchObject(COVERAGE_THRESHOLD_MATCH)
   })
 
-  it('fetches the base config is config not found', async () => {
+  it('fetches jest config and parses it', async () => {
     const request = client.request as unknown as jest.Mock
-    const notFoundCallback = () =>
-      Promise.resolve({
-        repository: {
-          jestConfig: undefined,
-        },
-      })
-    request.mockImplementationOnce(notFoundCallback) // for jest.config.js
+    request.mockImplementationOnce(jestConfigFile)
+
     const output = await runPlugin()
 
     expect(output).toMatchObject(COVERAGE_THRESHOLD_MATCH)

@@ -1,4 +1,5 @@
 import { gql } from 'graphql-request'
+import { parse } from 'json5'
 import { client } from '../core/api'
 import { PluginInput } from '../types'
 
@@ -22,7 +23,7 @@ async function getJestConfig(project: PluginInput, fileName: string) {
   } = await client.request(QUERY, { owner, name, configPath })
 
   return jestConfig
-    ? JSON.parse(jestConfig.text.substring('module.exports = '.length))
+    ? parse(jestConfig.text.substring('module.exports = '.length))
     : undefined
 }
 

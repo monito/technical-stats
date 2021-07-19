@@ -79,46 +79,6 @@ export const client = {
 ..
           `,
         },
-        jestConfig: {
-          text: `module.exports = ${JSON.stringify({
-            transform: {
-              '.(ts|tsx|js)': 'ts-jest',
-            },
-            roots: ['<rootDir>/src/', '<rootDir>/__tests__/'],
-            testEnvironment: 'node',
-            testResultsProcessor: '<rootDir>/../../node_modules/jest-junit',
-            testRegex: '(/__tests__/.*\\.(test|spec))\\.(ts|tsx|js)$',
-            moduleFileExtensions: ['ts', 'tsx', 'js'],
-            modulePathIgnorePatterns: ['lib'],
-            coveragePathIgnorePatterns: ['/node_modules/', '/__tests__/'],
-            coverageThreshold: {
-              global: {
-                branches: 80,
-                functions: 85,
-                lines: 95,
-                statements: 95,
-              },
-            },
-            collectCoverage: true,
-            collectCoverageFrom: ['src/**.{js,ts}'],
-            reporters: [
-              'default',
-              [
-                'jest-junit',
-                {
-                  suiteName: 'jest unit tests',
-                  outputDirectory: '../../junit',
-                  uniqueOutputName: 'true',
-                  classNameTemplate: '{classname}',
-                  titleTemplate: '{classname} {title}',
-                  ancestorSeparator: ' › ',
-                  usePathForSuiteName: 'true',
-                },
-              ],
-            ],
-            verbose: true,
-          })}`,
-        },
       },
     })
   ),
