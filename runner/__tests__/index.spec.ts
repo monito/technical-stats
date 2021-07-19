@@ -22,7 +22,9 @@ describe('runner', () => {
       goals: [],
     })
 
-    expect(output).toMatchSnapshot()
+    expect(output).toMatchSnapshot({
+      generatedAt: expect.any(String),
+    })
   })
 
   it('can generate report with goals applied', async () => {
@@ -35,16 +37,20 @@ describe('runner', () => {
         github,
         typescript,
       },
-      goals: [{
-        name: 'main branch',
-        description: 'the project is using main branch',
-        check: async ({ defaultBranchName }) => {
-          const status = defaultBranchName === 'main' ? 'pass' : 'fail'
-          return { status, value: defaultBranchName }
-        }
-      }],
+      goals: [
+        {
+          name: 'main branch',
+          description: 'the project is using main branch',
+          check: async ({ defaultBranchName }) => {
+            const status = defaultBranchName === 'main' ? 'pass' : 'fail'
+            return { status, value: defaultBranchName }
+          },
+        },
+      ],
     })
 
-    expect(output).toMatchSnapshot()
+    expect(output).toMatchSnapshot({
+      generatedAt: expect.any(String),
+    })
   })
 })
