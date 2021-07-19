@@ -1,4 +1,4 @@
-import { typescript } from '../plugin-typescript'
+import { typescript } from '..'
 import { client } from '../../core/api'
 
 jest.mock('../../core/api')

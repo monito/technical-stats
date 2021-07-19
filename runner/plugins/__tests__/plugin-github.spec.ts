@@ -1,4 +1,4 @@
-import { github } from '../plugin-github'
+import { github } from '..'
 import { client } from '../../core/api'
 
 jest.mock('../../core/api')
