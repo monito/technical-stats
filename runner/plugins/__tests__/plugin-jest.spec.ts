@@ -1,4 +1,4 @@
-import { jestConfig } from '../plugin-jest'
+import { jestConfig } from '..'
 import { client } from '../../core/api'
 
 jest.mock('../../core/api')
