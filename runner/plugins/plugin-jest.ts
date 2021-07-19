@@ -14,25 +14,22 @@ const QUERY = gql`
   }
 `
 
-export async function jestConfig(project: PluginInput) {
+async function getJestConfig(project: PluginInput, fileName: string) {
   const { owner, name, defaultBranchName } = project
-  let jestConfig
-  const { repository } = await client.request(QUERY, {
-    owner,
-    name,
-    configPath: `${defaultBranchName}:jest.config.js`,
-  })
-  jestConfig = repository.jestConfig?.text
-  if (!jestConfig) {
-    const { repository } = await client.request(QUERY, {
-      owner,
-      name,
-      configPath: `${defaultBranchName}:jest.config.base.js`,
-    })
-    jestConfig = repository.jestConfig?.text
-    if (!jestConfig) {
-      return {}
-    }
-  }
-  return JSON.parse(jestConfig.substring('module.exports = '.length))
+  const configPath = `${defaultBranchName}:${fileName}`
+  const {
+    repository: { jestConfig },
+  } = await client.request(QUERY, { owner, name, configPath })
+
+  return jestConfig
+    ? JSON.parse(jestConfig.text.substring('module.exports = '.length))
+    : undefined
+}
+
+export async function jestConfig(project: PluginInput) {
+  return (
+    (await getJestConfig(project, 'jest.config.js')) ||
+    (await getJestConfig(project, 'jest.config.base.js')) ||
+    {}
+  )
 }
