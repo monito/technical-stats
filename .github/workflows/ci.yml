@@ -7,9 +7,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '12.x'
-    - run: npm install
-    - run: npm run build
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "12.x"
+      - run: yarn install --frozen-lockfile
+      - run: yarn test
+      - run: yarn cli:test
+      - run: yarn build
