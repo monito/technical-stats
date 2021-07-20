@@ -52,6 +52,33 @@ export const client = {
         prTemplate: {
           text: '# Title',
         },
+        readme: {
+          text: `
+          # Projects Stats
+
+> Compliance statistics of our GitHub Monito projects
+
+---
+
+- [Why?](#why)
+- [Getting Started](#getting-started)
+- [FAQ](#faq)
+
+---
+
+## Why?
+
+...
+
+## Getting Started
+
+..
+
+## FAQ
+
+..
+          `,
+        },
       },
     })
   ),
