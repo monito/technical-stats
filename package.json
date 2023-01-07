@@ -17,7 +17,7 @@
     "dotenv": "^9.0.2",
     "graphql": "^15.5.0",
     "graphql-request": "^3.4.0",
-    "json5": "^2.2.0",
+    "json5": "^2.2.2",
     "yaml": "^1.10.2"
   },
   "devDependencies": {
